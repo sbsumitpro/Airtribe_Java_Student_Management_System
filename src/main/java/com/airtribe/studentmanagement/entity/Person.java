@@ -1,31 +1,32 @@
 package com.airtribe.studentmanagement.entity;
 
 public class Person {
-    public String name;
-    public int age;
-    private String phoneNumber;
-    private String emailId;
+    private static int nextId = 1;
+    protected int id;
+    protected String name;
+    protected String phoneNumber;
+    protected String emailId;
 
-    public Person(String name, int age, String phoneNumber, String emailId) {
+    public Person(String name, String emailId, String phoneNumber) {
+        this.id = nextId++;
         this.name = name;
-        this.age = age;
-        this.phoneNumber = phoneNumber;
         this.emailId = emailId;
+        this.phoneNumber = phoneNumber;
+    }
+
+    public int getId() {
+        return id;
     }
 
     public String getPhoneNumber() {
         return phoneNumber;
     }
 
-    public void setPhoneNumber(String phoneNumber) {
-        this.phoneNumber = phoneNumber;
+    public String getName() {
+        return name;
     }
 
     public String getEmailId() {
         return emailId;
-    }
-
-    public void setEmailId(String emailId) {
-        this.emailId = emailId;
     }
 }

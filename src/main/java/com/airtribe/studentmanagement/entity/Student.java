@@ -1,38 +1,32 @@
 package com.airtribe.studentmanagement.entity;
 
-public class Student extends Person{
+import com.airtribe.studentmanagement.Interface.Searchable;
 
-    public enum Course{
-        Node_JS,
-        Java
-    }
+public class Student extends Person implements Searchable {
+    protected String studentId;
 
-    Course course;
-    int cohortNo;
-    String currentCity;
-    double yearOfExp;
-    int totalXP;
-
-    public Student(String name, int age, String phoneNumber, String emailId, Course course, int cohortNo, String currentCity, double yearOfExp, int totalXP) {
-        super(name, age, phoneNumber, emailId);
-        this.course = course;
-        this.cohortNo = cohortNo;
-        this.currentCity = currentCity;
-        this.yearOfExp = yearOfExp;
-        this.totalXP = totalXP;
+    public Student(String name, String emailId, String phoneNumber, String studentId) {
+        super(name, emailId, phoneNumber);
+        this.studentId = studentId;
     }
 
     @Override
-    public String toString() {
-        return "Student{" +
-                "course=" + course +
-                ", cohortNo=" + cohortNo +
-                ", currentCity='" + currentCity + '\'' +
-                ", yearOfExp=" + yearOfExp +
-                ", totalXP=" + totalXP +
-                ", name='" + name + '\'' +
-                ", age=" + age +
-                '}';
+    public Boolean matches(String keyword){
+        keyword = keyword.toLowerCase();
+        return this.name.toLowerCase().contains(keyword) ||
+                this.emailId.toLowerCase().contains(keyword) ||
+                this.studentId.toLowerCase().contains(keyword);
     }
 
+    public String getStudentId() {
+        return studentId;
+    }
+
+    public void display(){
+        System.out.println("Student ID: " + studentId);
+        System.out.println("Name: " + name);
+        System.out.println("Email ID: " + emailId);
+        System.out.println("Phone Number: " + phoneNumber);
+        System.out.println("--------------------------------");
+    }
 }

@@ -1,64 +1,35 @@
 package com.airtribe.studentmanagement.entity;
 
-import java.util.ArrayList;
-import java.util.List;
+import com.airtribe.studentmanagement.Interface.Searchable;
 
-public class Course {
+public class Course implements Searchable {
     private final String id;
     private final String name;
-    private String description;
-    private CourseLanguage courseLanguage;
-    private CourseMedium courseMedium;
-    private List<Cohort> cohorts;
+    private final String description;
 
-    public void setCohorts(List<Cohort> cohorts) {
-        this.cohorts = cohorts;
-    }
-
-    public Course(String id, String name, String description, CourseLanguage courseLanguage, CourseMedium courseMedium) {
+    public Course(String id, String name, String description) {
         this.id = id;
         this.name = name;
         this.description = description;
-        this.courseLanguage = courseLanguage;
-        this.courseMedium = courseMedium;
-        this.cohorts = new ArrayList<>();
-    }
-
-    public Course(String id, String name, String description, CourseLanguage courseLanguage, CourseMedium courseMedium, List<Cohort> cohorts) {
-        this.id = id;
-        this.name = name;
-        this.description = description;
-        this.courseLanguage = courseLanguage;
-        this.courseMedium = courseMedium;
-        this.cohorts = cohorts;
-    }
-
-    public void addCohortToCourse(Cohort cohort){
-        this.cohorts.add(cohort);
     }
 
     public String getId() {
-        return Id;
-    }
-
-    public CourseMedium getCourseMedium() {
-        return courseMedium;
-    }
-
-    public CourseLanguage getCourseLanguage() {
-        return courseLanguage;
-    }
-
-    public String getDescription() {
-        return description;
+        return id;
     }
 
     public String getName() {
         return name;
     }
 
-    public List<Cohort> getCohorts() {
-        return cohorts;
+    public String getDescription() {
+        return description;
+    }
+
+    public Boolean matches(String keyword){
+        keyword = keyword.toLowerCase();
+        return this.name.toLowerCase().contains(keyword)
+                || this.description.toLowerCase().contains(keyword)
+                || this.id.toLowerCase().contains(keyword);
     }
 }
 
