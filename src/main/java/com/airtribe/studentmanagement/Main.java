@@ -2,6 +2,13 @@ package com.airtribe.studentmanagement;
 
 import com.airtribe.studentmanagement.entity.*;
 import com.airtribe.studentmanagement.service.*;
+import com.airtribe.studentmanagement.Driver.StudentDriver;
+import com.airtribe.studentmanagement.Driver.CourseDriver;
+import com.airtribe.studentmanagement.Driver.EnrollmentDriver;
+import com.airtribe.studentmanagement.Driver.StatisticsDriver;
+
+import java.util.Scanner;
+
 import static com.airtribe.studentmanagement.util.UtilityMethods.printMessage;
 import static com.airtribe.studentmanagement.util.UtilityMethods.printLine;
 import static com.airtribe.studentmanagement.config.DataConfig.STUDENT_DATA;
@@ -9,7 +16,11 @@ import static com.airtribe.studentmanagement.config.DataConfig.COURSE_DATA;
 import static com.airtribe.studentmanagement.config.DataConfig.ENROLLMENT_DATA;
 
 public class Main {
-
+    private StudentService studentService;
+    private CourseService courseService;
+    private EnrollmentService enrollmentService;
+    private Scanner scanner;
+    
     public static void main(String[] args) {
         try {
             Main app = new Main();
@@ -21,17 +32,19 @@ public class Main {
 
     private void runApplication() {
         // Initialize services
-        StudentService studentService = new StudentService();
-        CourseService courseService = new CourseService();
-        EnrollmentService enrollmentService = new EnrollmentService(studentService, courseService);
+        studentService = new StudentService();
+        courseService = new CourseService();
+        enrollmentService = new EnrollmentService(studentService, courseService);
+        scanner = new Scanner(System.in);
         
         // Setup data
         setupStudents(studentService);
         setupCourses(courseService);
         setupEnrollments(enrollmentService);
         
-        // Display results
-        displayResults(studentService, courseService, enrollmentService);
+        showMainMenu();
+
+        scanner.close();
     }
 
     private void setupStudents(StudentService studentService) {
@@ -65,45 +78,51 @@ public class Main {
         printLine();
     }
 
-    private void displayResults(StudentService studentService, CourseService courseService, EnrollmentService enrollmentService) {
-        displayEnrollments(enrollmentService);
-        displayStudents(studentService);
-        displayCourses(courseService);
-        displayStatistics(studentService, courseService, enrollmentService);
-    }
+    private void showMainMenu() {
+        while (true) {
+            printMessage("\n🎓 === STUDENT MANAGEMENT SYSTEM ===");
+            printMessage("1. 👥 Student Management");
+            printMessage("2. 📚 Course Management");
+            printMessage("3. 📝 Enrollment Management");
+            printMessage("4. 📊 Statistics & Reports");
+            printMessage("5. 🚪 Exit");
+            printMessage("Choose an option (1-5): ");
 
-    private void displayEnrollments(EnrollmentService enrollmentService) {
-        printMessage("ENROLLMENTS:");
-        for (Enrollment e : enrollmentService.getAllEnrollments()) {
-            String enrollmentInfo = String.format("%-15s | %-20s | %s", 
-                e.getStudent().getName(), 
-                e.getCourse().getName(), 
-                e.getEnrollmentDate());
-            printMessage(enrollmentInfo);
+            try {
+                int choice = scanner.nextInt();
+                scanner.nextLine(); // consume newline
+
+                switch (choice) {
+                    case 1 -> {
+                        StudentDriver studentDriver = new StudentDriver(studentService, scanner);
+                        studentDriver.showStudentMenu();
+                    }
+                    case 2 -> {
+                        CourseDriver courseDriver = new CourseDriver(courseService, scanner);
+                        courseDriver.showCourseMenu();
+                    }
+                    case 3 -> {
+                        EnrollmentDriver enrollmentDriver = new EnrollmentDriver(
+                                enrollmentService, studentService, courseService, scanner);
+                        enrollmentDriver.showEnrollmentMenu();
+                    }
+                    case 4 -> {
+                        StatisticsDriver statisticsDriver = new StatisticsDriver(
+                                studentService, courseService, enrollmentService, scanner);
+                        statisticsDriver.showStatisticsMenu();
+                    }
+                    case 5 -> {
+                        printMessage("👋 Thank you for using Student Management System!");
+                        return;
+                    }
+                    default -> printMessage("❌ Invalid choice. Please select 1-5.");
+                }
+            } catch (Exception e) {
+                printMessage("❌ Error: " + e.getMessage());
+                scanner.nextLine();
+            }
         }
-        printLine();
     }
 
-    private void displayStudents(StudentService studentService) {
-        printMessage("STUDENTS:");
-        studentService.getAllStudents().forEach(s -> 
-            printMessage("• " + s.getName() + " (" + s.getStudentId() + ")")
-        );
-        printLine();
-    }
 
-    private void displayCourses(CourseService courseService) {
-        printMessage("COURSES:");
-        courseService.getAllCourse().forEach(c -> 
-            printMessage("• " + c.getName() + " (" + c.getId() + ")")
-        );
-        printLine();
-    }
-
-    private void displayStatistics(StudentService studentService, CourseService courseService, EnrollmentService enrollmentService) {
-        printMessage(" STATISTICS:");
-        printMessage("Total Students: " + studentService.getAllStudents().size());
-        printMessage("Total Courses: " + courseService.getAllCourse().size());
-        printMessage("Total Enrollments: " + enrollmentService.getAllEnrollments().size());
-    }
 }
