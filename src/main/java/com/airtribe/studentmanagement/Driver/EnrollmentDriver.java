@@ -8,17 +8,11 @@ import static com.airtribe.studentmanagement.util.UtilityMethods.*;
 
 public class EnrollmentDriver {
     private final EnrollmentService enrollmentService;
-    private final StudentService studentService;
-    private final CourseService courseService;
     private final Scanner scanner;
 
-    public EnrollmentDriver(EnrollmentService enrollmentService, 
-                           StudentService studentService, 
-                           CourseService courseService, 
+    public EnrollmentDriver(EnrollmentService enrollmentService,
                            Scanner scanner) {
         this.enrollmentService = enrollmentService;
-        this.studentService = studentService;
-        this.courseService = courseService;
         this.scanner = scanner;
     }
 

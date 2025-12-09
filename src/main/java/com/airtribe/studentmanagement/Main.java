@@ -103,7 +103,7 @@ public class Main {
                     }
                     case 3 -> {
                         EnrollmentDriver enrollmentDriver = new EnrollmentDriver(
-                                enrollmentService, studentService, courseService, scanner);
+                                enrollmentService, scanner);
                         enrollmentDriver.showEnrollmentMenu();
                     }
                     case 4 -> {
