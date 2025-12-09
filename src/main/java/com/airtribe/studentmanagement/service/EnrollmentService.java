@@ -1,6 +1,7 @@
 package com.airtribe.studentmanagement.service;
 
 import com.airtribe.studentmanagement.entity.*;
+import com.airtribe.studentmanagement.exception.AlreadyEnrolledException;
 
 import java.time.LocalDate;
 import java.util.*;
@@ -17,15 +18,25 @@ public class EnrollmentService {
         this.courseService = courseService;
     }
 
-    public void enrolStudent(String StudentId, String CourseId){
-        Student student = studentService.getStudent(StudentId);
-        Course course = courseService.getCourse(CourseId);
-        if(student == null || course == null){
-            throw new IllegalArgumentException("Student or course not found");
+    public void enrolStudent(String studentId, String courseId){
+        Student student = studentService.getStudent(studentId);
+        Course course = courseService.getCourse(courseId);
+
+        if(isAlreadyEnrolled(studentId, courseId)){
+            throw new AlreadyEnrolledException(studentId, courseId);
         }
         String enrollmentId = "ENR"+seq++;
         Enrollment enrollment = new Enrollment(enrollmentId, student, course);
         enrollments.put(enrollmentId, enrollment);
+    }
+
+    private boolean isAlreadyEnrolled(String studentId, String courseId){
+        for(Enrollment e: enrollments.values()){
+            if(e.getStudent().getStudentId().equals(studentId) && e.getCourse().getId().equals(courseId)){
+                return true;
+            }
+        }
+        return false;
     }
 
     public void unenrolStudent(String enrollmentId){

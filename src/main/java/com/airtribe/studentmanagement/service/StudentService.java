@@ -1,6 +1,9 @@
 package com.airtribe.studentmanagement.service;
 
 import com.airtribe.studentmanagement.entity.Student;
+import com.airtribe.studentmanagement.exception.DuplicateStudentException;
+import com.airtribe.studentmanagement.exception.InvalidEmailException;
+import com.airtribe.studentmanagement.exception.StudentNotFoundException;
 
 import java.util.*;
 
@@ -8,10 +11,22 @@ public class StudentService {
     private final Map<String, Student> students = new HashMap<>();
 
     // Factory pattern
-    public Student addStudent(String name, String emailId, String phoneNumber, String studentId ){
+    public void addStudent(String name, String emailId, String phoneNumber, String studentId ){
+        if(!isValidEmail(emailId)){
+            throw new InvalidEmailException(emailId);
+        }
+
+        // check for duplicate student id
+        if(students.containsKey(studentId)){
+            throw new DuplicateStudentException(studentId);
+        }
+
         Student student = new Student(name, emailId, phoneNumber, studentId);
         students.put(student.getStudentId(), student);
-        return student;
+    }
+
+    private boolean isValidEmail(String email){
+        return email !=null && email.contains("@") && email.contains(".");
     }
 
     public Student removeStudent(String id){
@@ -19,7 +34,11 @@ public class StudentService {
     }
 
     public Student getStudent(String id){
-        return students.get(id);
+        Student student =  students.get(id);
+        if(student == null){
+            throw new StudentNotFoundException(id);
+        }
+        return student;
     }
 
     public List<Student> search(String keyword){

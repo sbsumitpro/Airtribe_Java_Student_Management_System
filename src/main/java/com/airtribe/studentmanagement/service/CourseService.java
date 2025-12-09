@@ -1,6 +1,7 @@
 package com.airtribe.studentmanagement.service;
 
 import com.airtribe.studentmanagement.entity.Course;
+import com.airtribe.studentmanagement.exception.CourseNotFoundException;
 
 import java.util.*;
 
@@ -19,7 +20,11 @@ public class CourseService {
     }
 
     public Course getCourse(String id){
-        return courses.get(id);
+        Course course = courses.get(id);
+        if(course == null){
+            throw new CourseNotFoundException(id);
+        }
+        return course;
     }
 
     public List<Course>search(String keyword){
