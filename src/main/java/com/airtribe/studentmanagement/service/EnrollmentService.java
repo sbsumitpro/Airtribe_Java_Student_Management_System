@@ -75,27 +75,27 @@ public class EnrollmentService {
     }
 
     public void removeEnrollmentByStudent(String studentId){
-        List<String> enrollementIdsToRemove = new ArrayList<>();
+        List<String> enrollmentIdsToRemove = new ArrayList<>();
 
         for(Enrollment e: enrollments.values()){
             if(e.getStudent().getStudentId().equals(studentId)){
-                enrollementIdsToRemove.add(e.getEnrollmentId());
+                enrollmentIdsToRemove.add(e.getEnrollmentId());
             }
         }
-        for(String enrollmentId: enrollementIdsToRemove){
+        for(String enrollmentId: enrollmentIdsToRemove){
             unenrollStudent(enrollmentId);
         }
     }
 
     public void removeEnrollmentByCourse(String courseId){
-        List<String> enrollementIdsToRemove = new ArrayList<>();
+        List<String> enrollmentIdsToRemove = new ArrayList<>();
 
         for(Enrollment e: enrollments.values()){
             if(e.getCourse().getId().equals(courseId)){
-                enrollementIdsToRemove.add(e.getEnrollmentId());
+                enrollmentIdsToRemove.add(e.getEnrollmentId());
             }
         }
-        for(String enrollmentId: enrollementIdsToRemove){
+        for(String enrollmentId: enrollmentIdsToRemove){
             unenrollStudent(enrollmentId);
         }
     }
