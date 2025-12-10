@@ -39,7 +39,7 @@ public class EnrollmentService {
         return false;
     }
 
-    public void unenrolStudent(String enrollmentId){
+    public void unenrollStudent(String enrollmentId){
         Enrollment enrollment = enrollments.remove(enrollmentId);
         if(enrollment == null){
             throw new IllegalArgumentException("Enrollment not found");
@@ -72,6 +72,32 @@ public class EnrollmentService {
             }
         }
         return result;
+    }
+
+    public void removeEnrollmentByStudent(String studentId){
+        List<String> enrollementIdsToRemove = new ArrayList<>();
+
+        for(Enrollment e: enrollments.values()){
+            if(e.getStudent().getStudentId().equals(studentId)){
+                enrollementIdsToRemove.add(e.getEnrollmentId());
+            }
+        }
+        for(String enrollmentId: enrollementIdsToRemove){
+            unenrollStudent(enrollmentId);
+        }
+    }
+
+    public void removeEnrollmentByCourse(String courseId){
+        List<String> enrollementIdsToRemove = new ArrayList<>();
+
+        for(Enrollment e: enrollments.values()){
+            if(e.getCourse().getId().equals(courseId)){
+                enrollementIdsToRemove.add(e.getEnrollmentId());
+            }
+        }
+        for(String enrollmentId: enrollementIdsToRemove){
+            unenrollStudent(enrollmentId);
+        }
     }
 
     public List<Enrollment> getAllEnrollments(){

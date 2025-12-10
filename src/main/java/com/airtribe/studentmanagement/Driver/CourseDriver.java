@@ -2,6 +2,8 @@ package com.airtribe.studentmanagement.Driver;
 
 import com.airtribe.studentmanagement.entity.Course;
 import com.airtribe.studentmanagement.service.CourseService;
+import com.airtribe.studentmanagement.service.EnrollmentService;
+
 import java.util.Scanner;
 
 import static com.airtribe.studentmanagement.util.UtilityMethods.*;
@@ -9,10 +11,12 @@ import static com.airtribe.studentmanagement.util.UtilityMethods.*;
 public class CourseDriver {
     private final CourseService courseService;
     private final Scanner scanner;
+    private final EnrollmentService enrollmentService;
 
-    public CourseDriver(CourseService courseService, Scanner scanner) {
+    public CourseDriver(CourseService courseService, Scanner scanner, EnrollmentService enrollmentService) {
         this.courseService = courseService;
         this.scanner = scanner;
+        this.enrollmentService = enrollmentService;
     }
 
     public void showCourseMenu() {
@@ -123,7 +127,7 @@ public class CourseDriver {
             printMessage("Enter course ID to remove: ");
             String courseId = scanner.nextLine().trim();
             
-            Course removed = courseService.removeCourse(courseId);
+            Course removed = courseService.removeCourse(courseId, enrollmentService);
             if (removed != null) {
                 printMessage("✅ Course removed: " + removed.getName());
             } else {

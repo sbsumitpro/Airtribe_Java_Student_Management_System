@@ -1,6 +1,5 @@
 package com.airtribe.studentmanagement.Driver;
 
-import com.airtribe.studentmanagement.entity.Enrollment;
 import com.airtribe.studentmanagement.service.*;
 import java.util.Scanner;
 
@@ -92,7 +91,7 @@ public class EnrollmentDriver {
             printMessage("Enter enrollment ID: ");
             String enrollmentId = scanner.nextLine().trim();
             
-            enrollmentService.unenrolStudent(enrollmentId);
+            enrollmentService.unenrollStudent(enrollmentId);
             printMessage("✅ Student unenrolled successfully!");
             
         } catch (Exception e) {

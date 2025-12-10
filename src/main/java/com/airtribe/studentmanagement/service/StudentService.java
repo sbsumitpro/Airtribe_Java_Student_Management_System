@@ -29,8 +29,13 @@ public class StudentService {
         return email !=null && email.contains("@") && email.contains(".");
     }
 
-    public Student removeStudent(String id){
-        return students.remove(id);
+    public Student removeStudent(String id, EnrollmentService enrollmentService){
+        Student student = students.remove(id);
+        if(student == null){
+            throw new StudentNotFoundException(id);
+        }
+        enrollmentService.removeEnrollmentByStudent(id);
+        return student;
     }
 
     public Student getStudent(String id){

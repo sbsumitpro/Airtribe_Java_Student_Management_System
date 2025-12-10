@@ -1,6 +1,7 @@
 package com.airtribe.studentmanagement.Driver;
 
 import com.airtribe.studentmanagement.entity.Student;
+import com.airtribe.studentmanagement.service.EnrollmentService;
 import com.airtribe.studentmanagement.service.StudentService;
 import java.util.Scanner;
 
@@ -8,11 +9,13 @@ import static com.airtribe.studentmanagement.util.UtilityMethods.*;
 
 public class StudentDriver {
     private final StudentService studentService;
+    private final EnrollmentService enrollmentService;
     private final Scanner scanner;
 
-    public StudentDriver(StudentService studentService, Scanner scanner) {
+    public StudentDriver(StudentService studentService, Scanner scanner, EnrollmentService enrollmentService) {
         this.studentService = studentService;
         this.scanner = scanner;
+        this.enrollmentService = enrollmentService;
     }
 
     public void showStudentMenu() {
@@ -123,7 +126,7 @@ public class StudentDriver {
             printMessage("Enter student ID to remove: ");
             String studentId = scanner.nextLine().trim();
             
-            Student removed = studentService.removeStudent(studentId);
+            Student removed = studentService.removeStudent(studentId, enrollmentService);
             if (removed != null) {
                 printMessage("✅ Student removed: " + removed.getName());
             } else {

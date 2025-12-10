@@ -7,7 +7,6 @@ import java.util.*;
 
 public class CourseService {
     private final Map<String, Course> courses = new HashMap<>();
-
     // Factory pattern
     public Course addCourse(String id, String name, String description){
         Course course = new Course(id, name, description);
@@ -15,8 +14,13 @@ public class CourseService {
         return course;
     }
 
-    public Course removeCourse(String id){
-        return courses.remove(id);
+    public Course removeCourse(String id, EnrollmentService enrollmentService){
+        Course course = courses.remove(id);
+        if(course == null){
+            throw new CourseNotFoundException(id);
+        }
+        enrollmentService.removeEnrollmentByCourse(id);
+        return course;
     }
 
     public Course getCourse(String id){

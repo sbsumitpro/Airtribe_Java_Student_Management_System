@@ -94,16 +94,15 @@ public class Main {
 
                 switch (choice) {
                     case 1 -> {
-                        StudentDriver studentDriver = new StudentDriver(studentService, scanner);
+                        StudentDriver studentDriver = new StudentDriver(studentService, scanner, enrollmentService);
                         studentDriver.showStudentMenu();
                     }
                     case 2 -> {
-                        CourseDriver courseDriver = new CourseDriver(courseService, scanner);
+                        CourseDriver courseDriver = new CourseDriver(courseService, scanner, enrollmentService);
                         courseDriver.showCourseMenu();
                     }
                     case 3 -> {
-                        EnrollmentDriver enrollmentDriver = new EnrollmentDriver(
-                                enrollmentService, scanner);
+                        EnrollmentDriver enrollmentDriver = new EnrollmentDriver(enrollmentService, scanner);
                         enrollmentDriver.showEnrollmentMenu();
                     }
                     case 4 -> {
